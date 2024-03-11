@@ -70,7 +70,7 @@ deepspeed_save_states="model_only"
 
 if [ ${stage} -le -1 ] && [ ${stop_stage} -ge -1 ]; then
   echo "stage -1: Data Download"
-  for part in dev-clean test-clean dev-other test-other train-clean-100 train-clean-360 train-other-500; do
+  for part in dev-clean test-clean train-clean-100 train-clean-360 train-other-500; do
     local/download_and_untar.sh ${datadir} ${data_url} ${part}
   done
 fi
@@ -79,7 +79,7 @@ if [ ${stage} -le 0 ] && [ ${stop_stage} -ge 0 ]; then
   ### Task dependent. You have to make data the following preparation part by yourself.
   ### But you can utilize Kaldi recipes in most cases
   echo "stage 0: Data preparation"
-  for part in dev-clean test-clean dev-other test-other train-clean-100 train-clean-360; do
+  for part in dev-clean test-clean train-clean-100 train-clean-360; do
     # use underscore-separated names in data directories.
     local/data_prep_torchaudio.sh ${datadir}/LibriSpeech/${part} $wave_data/${part//-/_}
   done
@@ -98,7 +98,7 @@ if [ ${stage} -le 1 ] && [ ${stop_stage} -ge 1 ]; then
   done
   mkdir -p $wave_data/dev
   # merge total dev data
-  for set in dev_clean dev_other; do
+  for set in dev_clean; do
     for f in `ls $wave_data/$set`; do
       cat $wave_data/$set/$f >> $wave_data/$dev_set/$f
     done
