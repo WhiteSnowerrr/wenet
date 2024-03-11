@@ -79,9 +79,9 @@ if [ ${stage} -le 0 ] && [ ${stop_stage} -ge 0 ]; then
   ### Task dependent. You have to make data the following preparation part by yourself.
   ### But you can utilize Kaldi recipes in most cases
   echo "stage 0: Data preparation"
-  for part in dev-clean test-clean dev-other test-other train-clean-100 train-clean-360 train-other-500; do
+  for part in dev-clean test-clean dev-other test-other train-clean-100 train-clean-360; do
     # use underscore-separated names in data directories.
-    local/data_prep_torchaudio.sh ${datadir}/${part}/LibriSpeech $wave_data/${part//-/_}
+    local/data_prep_torchaudio.sh ${datadir}/LibriSpeech/${part} $wave_data/${part//-/_}
   done
 fi
 
@@ -91,7 +91,7 @@ if [ ${stage} -le 1 ] && [ ${stop_stage} -ge 1 ]; then
   echo "stage 1: Feature Generation"
   mkdir -p $wave_data/train_960
   # merge total training data
-  for set in train_clean_100 train_clean_360 train_other_500; do
+  for set in train_clean_100 train_clean_360; do
     for f in `ls $wave_data/$set`; do
       cat $wave_data/$set/$f >> $wave_data/train_960/$f
     done
